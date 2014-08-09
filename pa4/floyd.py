@@ -9,11 +9,6 @@ import argparse
 
 INFINITY = float('inf')
 
-class Edge:
-    def __init__(self, tail, length):
-        self.tail = tail
-        self.length = length
-
 def read_file(filename):
     with open(filename) as f:
         num_vertices, num_edges = [int(x) for x in f.readline().split()]
@@ -39,7 +34,7 @@ def floyd_warshall(n, tail_to_head):
                 a[i][j] = tail_to_head[i][j]
             else:
                 a[i][j] = INFINITY
-    
+
     for k in range(1, n):
         if verbose: print("Iteration:", k)
         for i in range(1, n + 1):
@@ -49,14 +44,13 @@ def floyd_warshall(n, tail_to_head):
     for i in range(1, n + 1):
         for j in range(1, n + 1):
             a[i][j] = min(a[i][j], a[i][n] + a[n][j])
-            if a[i][j] < shortest_path_length:
-                shortest_path_length = a[i][j]
-    
+            shortest_path_length = min(shortest_path_length, a[i][j])
+
     # Check for negative cycles by inspecting diagonal
     for i in range(1, n + 1):
         if a[i][i] < 0:
             return None
-    
+
     return shortest_path_length
 
 if __name__ == "__main__":
@@ -65,7 +59,7 @@ if __name__ == "__main__":
     parser.add_argument('--verbose', action='store_true', help="print additional messages")
 
     args = parser.parse_args()
-    
+
     verbose = args.verbose
     num_vertices, num_edges, tail_to_head = read_file(args.filename)
     print(floyd_warshall(num_vertices, tail_to_head))

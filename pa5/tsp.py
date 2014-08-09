@@ -7,7 +7,6 @@ for solving the Travelling Salesman Problem (TSP).
 
 import argparse
 import copy
-import cProfile
 import itertools
 import math
 
